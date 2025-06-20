@@ -30,5 +30,11 @@ namespace ClientsManagement_Api.Controllers
             var response = await _clienteInterface.ListarClientes();
             return response;
         }
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<ResponseModel<ClienteModel>>> ObterClientePorId(int Id)
+        {
+            var response = await _clienteInterface.ObterClientePorId(Id);
+            return response;
+        }
     }
 }
