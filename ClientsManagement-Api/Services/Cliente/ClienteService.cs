@@ -67,4 +67,22 @@ public class ClienteService : IClienteInterface
         return response;
         
     }
+
+    public async Task<ResponseModel<ClienteModel>> ObterClientePorId(int Id)
+    {
+        ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
+        var Cliente = await _context.Clientes
+            .AsNoTracking()
+            .Include(c => c.Contato)
+            .Include(c => c.Endereco)
+            .FirstOrDefaultAsync(c => c.Id == Id);
+        if (Cliente is null)
+        {
+            throw new NotFoundException("Cliente não encontrado.");
+        }
+        response.Data = Cliente;
+        response.Message = "Cliente encontrado com sucesso!";
+        response.Success = true;
+        return response;
+    }
 }
