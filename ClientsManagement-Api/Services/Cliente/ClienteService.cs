@@ -1,4 +1,3 @@
-using AutoMapper;
 using ClientsManagement_Api.Data;
 using ClientsManagement_Api.Exceptions;
 using ClientsManagement_Api.Models.Dtos;
@@ -17,7 +16,6 @@ public class ClienteService : IClienteInterface
         _context = context;
         _viaCepInterface = viaCepInterface;
     }
-
     public async Task<ResponseModel<ClienteModel>> RegistrarNovoCliente(NovoClienteDto ClienteDto)
     {
         ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
@@ -51,7 +49,6 @@ public class ClienteService : IClienteInterface
         response.Success = true;
         return response;
     }
-
     public async Task<ResponseModel<List<ClienteModel>>> ListarClientes()
     {
         ResponseModel<List<ClienteModel>> response = new ResponseModel<List<ClienteModel>>();
@@ -67,7 +64,6 @@ public class ClienteService : IClienteInterface
         return response;
         
     }
-
     public async Task<ResponseModel<ClienteModel>> ObterClientePorId(int Id)
     {
         ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
@@ -85,7 +81,20 @@ public class ClienteService : IClienteInterface
         response.Success = true;
         return response;
     }
-
+    public async Task<ResponseModel<List<ClienteModel>>> ObterClientePorNome(string nome)
+    {
+        ResponseModel<List<ClienteModel>> response = new ResponseModel<List<ClienteModel>>();
+        var Clientes = await _context.Clientes
+            .AsNoTracking()
+            .Include(c => c.Contato)
+            .Include(c => c.Endereco)
+            .Where(c => c.Nome.ToLower().Contains(nome.ToLower()))
+            .ToListAsync();
+        response.Data = Clientes;
+        response.Message = "Clientes encontrado com sucesso!";
+        response.Success = true;
+        return response;
+    }
     public async Task<ResponseModel<ClienteModel>> AtualizarCliente(int Id, AtualizarClienteDto ClienteDto)
     {
         ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
@@ -127,7 +136,6 @@ public class ClienteService : IClienteInterface
         response.Success = true;
         return response;
     }
-
     public async Task<ResponseModel<ClienteModel>> DeletarCliente(int Id)
     {
         ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
