@@ -36,5 +36,11 @@ namespace ClientsManagement_Api.Controllers
             var response = await _clienteInterface.ObterClientePorId(Id);
             return response;
         }
+        [HttpPut("{Id}")]
+        public async Task<ActionResult<ResponseModel<ClienteModel>>> AtualizarCliente(int Id, AtualizarClienteDto ClienteDto)
+        {
+            var response = await _clienteInterface.AtualizarCliente(Id, ClienteDto);
+            return response;
+        }
     }
 }
