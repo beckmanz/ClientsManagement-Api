@@ -42,5 +42,11 @@ namespace ClientsManagement_Api.Controllers
             var response = await _clienteInterface.AtualizarCliente(Id, ClienteDto);
             return response;
         }
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<ResponseModel<ClienteModel>>> DeletarCliente(int Id)
+        {
+            var response = await _clienteInterface.DeletarCliente(Id);
+            return response;
+        }
     }
 }
