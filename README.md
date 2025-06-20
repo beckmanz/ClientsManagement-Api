@@ -77,6 +77,58 @@ https://localhost:{porta}/Scalar
 
 ---
 
+## ✅ Exemplo de JSON para **POST** `/api/cliente`
+
+> **Objetivo:** Registrar um novo cliente (obrigatório informar todos os campos necessários)
+
+```json
+{
+  "nome": "João Silva",
+  "contato": {
+    "tipo": "Telefone",
+    "texto": "(11) 99876-5432"
+  },
+  "endereco": {
+    "cep": "01001-000",
+    "numero": "123",
+    "complemento": "Apto 45"
+  }
+}
+```
+
+---
+
+## ✅ Exemplo de JSON para **PUT** `/api/cliente/{id}`
+
+> **Objetivo:** Atualizar apenas os campos desejados (exemplo: alterar nome e adicionar um novo contato)
+> **Todos os campos são opcionais no PUT**
+
+```json
+{
+  "nome": "João Silva Atualizado",
+  "contato": {
+    "tipo": "Telefone",
+    "texto": "(11) 99876-5432"
+  },
+  "endereco": {
+    "cep": "01001-000",
+    "numero": "456",
+    "complemento": "Bloco B"
+  }
+}
+```
+
+> ✅ Se você quiser alterar só um campo (exemplo: apenas o nome), pode enviar um JSON assim:
+
+```json
+{
+  "nome": "Novo Nome"
+}
+```
+
+---
+
+
 ## ✅ Funcionalidades principais:
 
 * Cadastro de clientes com validação automática de CEP via API externa (**ViaCEP**)
@@ -89,7 +141,3 @@ https://localhost:{porta}/Scalar
 ## ✅ Sobre a integração com ViaCEP:
 
 A cada registro ou atualização de CEP, a aplicação faz uma consulta em tempo real na **[API ViaCEP](https://viacep.com.br/)** para preencher os campos de **Logradouro** e **Cidade**, garantindo que o CEP informado seja válido.
-
----
-
-Se quiser, posso gerar um exemplo de JSON de requisição para cada endpoint (exemplo de body para POST e PUT). Quer?
