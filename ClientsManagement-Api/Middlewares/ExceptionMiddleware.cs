@@ -35,6 +35,21 @@ public class ExceptionMiddleware
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             await context.Response.WriteAsJsonAsync(problemDetails);
         }
+        catch (NotFoundException ex)
+        {
+            _logger.LogWarning(ex, "Resource not found.");
+
+            var problemDetails = new ProblemDetails
+            {
+                Title = "Not Found",
+                Status = StatusCodes.Status404NotFound,
+                Detail = ex.Message,
+                Instance = context.Request.Path
+            };
+
+            context.Response.StatusCode = StatusCodes.Status404NotFound;
+            await context.Response.WriteAsJsonAsync(problemDetails);
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An unexpected error occurred.");
