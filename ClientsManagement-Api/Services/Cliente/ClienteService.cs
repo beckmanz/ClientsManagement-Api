@@ -127,4 +127,19 @@ public class ClienteService : IClienteInterface
         response.Success = true;
         return response;
     }
+
+    public async Task<ResponseModel<ClienteModel>> DeletarCliente(int Id)
+    {
+        ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
+        var Cliente = _context.Clientes.FirstOrDefault(c => c.Id == Id);
+        if (Cliente is null)
+        {
+            throw new NotFoundException("Cliente não encontrado.");
+        }
+        _context.Remove(Cliente);
+        await _context.SaveChangesAsync();
+        response.Message = "Cliente deletado com sucesso!";
+        response.Success = true;
+        return response;
+    }
 }
