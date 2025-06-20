@@ -11,19 +11,16 @@ namespace ClientsManagement_Api.Controllers
     public class ClienteController : ControllerBase
     {
         private readonly IClienteInterface _clienteInterface;
-
         public ClienteController(IClienteInterface clienteInterface)
         {
             _clienteInterface = clienteInterface;
         }
-
         [HttpPost]
         public async Task<ActionResult<ResponseModel<ClienteModel>>> RegistrarNovoCliente(NovoClienteDto ClienteDto)
         {
             var response = await _clienteInterface.RegistrarNovoCliente(ClienteDto);
             return response;
         }
-
         [HttpGet]
         public async Task<ActionResult<ResponseModel<List<ClienteModel>>>> ListarClientes()
         {
@@ -34,6 +31,12 @@ namespace ClientsManagement_Api.Controllers
         public async Task<ActionResult<ResponseModel<ClienteModel>>> ObterClientePorId(int Id)
         {
             var response = await _clienteInterface.ObterClientePorId(Id);
+            return response;
+        }
+        [HttpGet("ObterPorNome/{nome}")]
+        public async Task<ActionResult<ResponseModel<List<ClienteModel>>>> ObterClientePorNome(string nome)
+        {
+            var response = await _clienteInterface.ObterClientePorNome(nome);
             return response;
         }
         [HttpPut("{Id}")]
