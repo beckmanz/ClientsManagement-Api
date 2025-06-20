@@ -85,4 +85,46 @@ public class ClienteService : IClienteInterface
         response.Success = true;
         return response;
     }
+
+    public async Task<ResponseModel<ClienteModel>> AtualizarCliente(int Id, AtualizarClienteDto ClienteDto)
+    {
+        ResponseModel<ClienteModel> response = new ResponseModel<ClienteModel>();
+        var Cliente = await _context.Clientes
+            .Include(c => c.Contato)
+            .Include(c => c.Endereco)
+            .FirstOrDefaultAsync(c => c.Id == Id);
+        if (Cliente is null)
+        {
+            throw new NotFoundException("Cliente não encontrado.");
+        }
+        if (ClienteDto.Nome is not null)
+            Cliente.Nome = ClienteDto.Nome;
+        if (ClienteDto.Endereco is not null)
+        {
+            var enderecoApi = await _viaCepInterface.ConsutarCep(ClienteDto.Endereco.Cep);
+
+            if (enderecoApi is null)
+            {
+                throw new BadRequestException("CEP inválido");
+            }
+
+            Cliente.Endereco.Cep = enderecoApi.Cep;
+            Cliente.Endereco.Logradouro = enderecoApi.Logradouro;
+            Cliente.Endereco.Cidade = enderecoApi.Cidade;
+            Cliente.Endereco.Numero = ClienteDto.Endereco.Numero;
+            Cliente.Endereco.Complemento = ClienteDto.Endereco.Complemento;
+        }
+
+        if (ClienteDto.Contato is not null)
+        {
+            Cliente.Contato.Tipo = ClienteDto.Contato.Tipo;
+            Cliente.Contato.Texto = ClienteDto.Contato.Texto;
+        }
+        await _context.SaveChangesAsync();
+        
+        response.Data = Cliente;
+        response.Message = "Cliente atualizado com sucesso!";
+        response.Success = true;
+        return response;
+    }
 }

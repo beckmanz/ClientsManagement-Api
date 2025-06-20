@@ -8,4 +8,5 @@ public interface IClienteInterface
     Task<ResponseModel<ClienteModel>> RegistrarNovoCliente(NovoClienteDto ClienteDto);
     Task<ResponseModel<List<ClienteModel>>> ListarClientes();
     Task<ResponseModel<ClienteModel>> ObterClientePorId(int Id);
+    Task<ResponseModel<ClienteModel>> AtualizarCliente(int Id, AtualizarClienteDto ClienteDto);
 }
