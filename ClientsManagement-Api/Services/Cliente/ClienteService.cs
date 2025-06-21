@@ -110,24 +110,31 @@ public class ClienteService : IClienteInterface
             Cliente.Nome = ClienteDto.Nome;
         if (ClienteDto.Endereco is not null)
         {
-            var enderecoApi = await _viaCepInterface.ConsutarCep(ClienteDto.Endereco.Cep);
-
-            if (enderecoApi is null)
+            if (!string.IsNullOrWhiteSpace(ClienteDto.Endereco.Cep))
             {
-                throw new BadRequestException("CEP inválido");
-            }
+                var enderecoApi = await _viaCepInterface.ConsutarCep(ClienteDto.Endereco.Cep);
+                if (enderecoApi is null)
+                {
+                    throw new BadRequestException("CEP inválido");
+                }
 
-            Cliente.Endereco.Cep = enderecoApi.Cep;
-            Cliente.Endereco.Logradouro = enderecoApi.Logradouro;
-            Cliente.Endereco.Cidade = enderecoApi.Cidade;
-            Cliente.Endereco.Numero = ClienteDto.Endereco.Numero;
-            Cliente.Endereco.Complemento = ClienteDto.Endereco.Complemento;
+                Cliente.Endereco.Cep = enderecoApi.Cep;
+                Cliente.Endereco.Logradouro = enderecoApi.Logradouro;
+                Cliente.Endereco.Cidade = enderecoApi.Cidade;
+                
+            }
+            if(!string.IsNullOrEmpty(ClienteDto.Endereco.Numero))
+                Cliente.Endereco.Numero = ClienteDto.Endereco.Numero;
+            if(!string.IsNullOrEmpty(ClienteDto.Endereco.Complemento))
+                Cliente.Endereco.Complemento = ClienteDto.Endereco.Complemento;
         }
 
         if (ClienteDto.Contato is not null)
         {
-            Cliente.Contato.Tipo = ClienteDto.Contato.Tipo;
-            Cliente.Contato.Texto = ClienteDto.Contato.Texto;
+            if(!string.IsNullOrEmpty(ClienteDto.Contato.Tipo))
+                Cliente.Contato.Tipo = ClienteDto.Contato.Tipo;
+            if(!string.IsNullOrEmpty(ClienteDto.Contato.Texto))
+                Cliente.Contato.Texto = ClienteDto.Contato.Texto;
         }
         await _context.SaveChangesAsync();
         
